@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluation · KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">KE4H · UniBO</span>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="topic.html">Topic</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="sparql.html">SPARQL</a>
+    <a href="prompts.html">LLM Experiments</a>
+    <a href="evaluation.html" class="active">Evaluation</a>
+    <a href="challenges.html">Challenges</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Evaluation</div>
+      <h1>Scoring Every Approach</h1>
+      <p>We evaluated each method we tested across six dimensions — as domain experts judging AI-assisted historical analysis.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="callout blue">
+      <div class="callout-label">The 6 dimensions</div>
+      <strong>Accuracy</strong> · <strong>Analytical Depth</strong> · <strong>Consistency with KG</strong> · <strong>Bias Sensitivity</strong> · <strong>Usability</strong> · <strong>Trustworthiness</strong><br>
+      <span style="font-size:13px;">Scale: 1 (poor) → 5 (excellent)</span>
+    </div>
+
+    <h2>Results by Approach</h2>
+
+    <div class="eval-grid">
+
+      <div class="eval-card">
+        <h4>KG-Only (SPARQL results)</h4>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Accuracy</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Analytical Depth</span><span class="eval-score">2/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:40%;background:var(--amber);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>KG Consistency</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Bias Sensitivity</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Usability</span><span class="eval-score">3/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:60%;background:var(--blue);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Trustworthiness</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+      </div>
+
+      <div class="eval-card">
+        <h4>LLM Zero-Shot (no triples)</h4>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Accuracy</span><span class="eval-score">2/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:40%;background:var(--red);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Analytical Depth</span><span class="eval-score">4/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:80%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>KG Consistency</span><span class="eval-score">1/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:20%;background:var(--red);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Bias Sensitivity</span><span class="eval-score">2/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:40%;background:var(--red);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Usability</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Trustworthiness</span><span class="eval-score">2/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:40%;background:var(--red);"></div></div>
+        </div>
+      </div>
+
+      <div class="eval-card">
+        <h4>RAG (triples + LLM)</h4>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Accuracy</span><span class="eval-score">4/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:80%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Analytical Depth</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>KG Consistency</span><span class="eval-score">4/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:80%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Bias Sensitivity</span><span class="eval-score">3/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:60%;background:var(--blue);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Usability</span><span class="eval-score">4/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:80%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Trustworthiness</span><span class="eval-score">4/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:80%;background:var(--green);"></div></div>
+        </div>
+      </div>
+
+      <div class="eval-card">
+        <h4>Chain-of-Thought + RAG</h4>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Accuracy</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Analytical Depth</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>KG Consistency</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Bias Sensitivity</span><span class="eval-score">4/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:80%;background:var(--green);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Usability</span><span class="eval-score">3/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:60%;background:var(--blue);"></div></div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-row-top"><span>Trustworthiness</span><span class="eval-score">5/5</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green);"></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <h2>Our Conclusion</h2>
+    <p>The best approach is <strong>Chain-of-Thought + RAG</strong> — combining structured KG triples with step-by-step LLM reasoning. This produces the most accurate, deep, and trustworthy analysis. The weakest approach is LLM-only with no triples: it sounds convincing but describes general historical knowledge rather than our specific corpus.</p>
+
+    <div class="callout red">
+      <div class="callout-label">Most important finding</div>
+      When given triples from Nazi-era German newspapers, both GPT-4o and Claude add modern moral framing not present in the original data. This is LLM <strong>bias injection</strong> — the models cannot help but contextualise antisemitic framing through a contemporary ethical lens. This is useful to document: it shows the gap between what the KG says and what the LLM interprets.
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>KE4H Project 2</strong> · Framing the Displaced · Università di Bologna · 2026
+  </footer>
+</div>
+</body>
+</html>

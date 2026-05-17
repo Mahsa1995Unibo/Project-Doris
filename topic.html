@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topic & Context · KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">KE4H · UniBO</span>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="topic.html" class="active">Topic</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="sparql.html">SPARQL</a>
+    <a href="prompts.html">LLM Experiments</a>
+    <a href="evaluation.html">Evaluation</a>
+    <a href="challenges.html">Challenges</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Topic & Context</div>
+      <h1>Jewish Refugees in 1938:<br>The Historical Background</h1>
+      <p>Understanding the events that shaped how newspapers described Jewish displacement — and why framing mattered then and now.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <h2>The Historical Context</h2>
+    <p>By 1938, Jewish people in Germany and Austria were facing systematic persecution under the Nazi regime. The year was pivotal: three major events defined the international response — and generated intense newspaper coverage across all three languages in the mhKG.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num">Jul</div>
+        <h4>Évian Conference · July 1938</h4>
+        <p>32 countries met in France to discuss the Jewish refugee crisis. Almost all refused to raise immigration quotas. A defining moment of international failure.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--amber);">
+        <div class="card-num" style="color:var(--amber-light);">Sep</div>
+        <h4>Italian Racial Laws · Sep 1938</h4>
+        <p>Italy passed antisemitic legislation modelled on Germany's Nuremberg Laws. This shifted Italian press rhetoric sharply.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--red);">
+        <div class="card-num" style="color:var(--red-light);">Nov</div>
+        <h4>Kristallnacht · Nov 9–10, 1938</h4>
+        <p>Coordinated Nazi attacks destroyed thousands of Jewish businesses and synagogues. This is the diachronic anchor of our analysis.</p>
+      </div>
+    </div>
+
+    <h2>Why Framing Matters</h2>
+    <p>Two journalists can describe the same crowd of displaced people and produce completely different moral pictures — depending on which words they choose. This is <strong>framing</strong>: the way language shapes who we see as the victim and who as the threat.</p>
+
+    <div class="callout red">
+      <div class="callout-label">A concrete example</div>
+      <p style="margin:0; font-size:15px;"><em>"Anti-Nazi protesters charged the police lines."</em></p>
+      <p style="margin:0.5rem 0 0; font-size:13px; color:var(--red-dark);">→ Frame: ATTACK. <strong>Assailant</strong> = protesters. <strong>Victim</strong> = police.</p>
+    </div>
+
+    <div class="callout green" style="margin-top:8px;">
+      <div class="callout-label">The same event, different framing</div>
+      <p style="margin:0; font-size:15px;"><em>"Crowds of anti-Nazis were dispersed by police forces."</em></p>
+      <p style="margin:0.5rem 0 0; font-size:13px; color:#085041;">→ Frame: DISPERSAL. <strong>Agent</strong> = police. <strong>Theme</strong> = crowds (passive).</p>
+    </div>
+
+    <h2>The Three Corpora</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Language</th>
+          <th>Source</th>
+          <th>Political position in 1938</th>
+          <th>Expected framing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="lang lang-en">EN</span> English</td>
+          <td>American newspapers (Library of Congress)</td>
+          <td>Mixed — some sympathy, some restrictionism</td>
+          <td>Jewish people likely as Victim</td>
+        </tr>
+        <tr>
+          <td><span class="lang lang-de">DE</span> German</td>
+          <td>Hakenkreuzbanner (Nazi party, Mannheim)</td>
+          <td>Official Nazi ideology</td>
+          <td>Jewish people as threat / Agent</td>
+        </tr>
+        <tr>
+          <td><span class="lang lang-it">IT</span> Italian</td>
+          <td>Italian press (DiaCORIS / Il Resto del Carlino)</td>
+          <td>Fascist but less radical before Sept 1938</td>
+          <td>Shifting after racial laws</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>What Is FrameNet?</h2>
+    <p><a href="https://framenet.icsi.berkeley.edu/" target="_blank">FrameNet</a> is a linguistic database developed at UC Berkeley. It defines hundreds of <strong>frames</strong> — conceptual scenarios — each with defined participant roles called <strong>Frame Elements</strong>.</p>
+
+    <div class="callout blue">
+      <div class="callout-label">Frame example — ATTACK</div>
+      <p style="margin:0; font-size:14px;">The ATTACK frame is triggered by words like <em>attack, assault, raid, charge</em>. Its Frame Elements are: <strong>Assailant</strong> (who attacks), <strong>Victim</strong> (who is attacked), and optionally <strong>Weapon</strong>. The same word "attack" in a German article vs an English article may assign these roles to completely different entities.</p>
+    </div>
+
+    <h2>The Knowledge Gap We Address</h2>
+    <p>The mhKG encodes frame-role assignments for entities across three languages, but no study has yet systematically compared the <strong>Victim vs Assailant assignment specifically for Jewish entities</strong> across all three corpora in 1938 — before and after Kristallnacht. That is the gap this project fills.</p>
+
+    <div class="callout amber">
+      <div class="callout-label">Key resources</div>
+      <a href="https://framenet.icsi.berkeley.edu/" target="_blank">FrameNet</a> ·
+      <a href="https://www.wikidata.org/wiki/Q153010" target="_blank">Kristallnacht (Wikidata)</a> ·
+      <a href="https://www.wikidata.org/wiki/Q179016" target="_blank">Évian Conference (Wikidata)</a> ·
+      <a href="https://en.wikipedia.org/wiki/Hakenkreuzbanner" target="_blank">Hakenkreuzbanner (Wikipedia)</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>KE4H Project 2</strong> · Framing the Displaced · Università di Bologna · 2026
+  </footer>
+</div>
+</body>
+</html>

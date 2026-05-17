@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology · KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">KE4H · UniBO</span>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="topic.html">Topic</a>
+    <a href="methodology.html" class="active">Methodology</a>
+    <a href="sparql.html">SPARQL</a>
+    <a href="prompts.html">LLM Experiments</a>
+    <a href="evaluation.html">Evaluation</a>
+    <a href="challenges.html">Challenges</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Methodology</div>
+      <h1>How We Did It:<br>Step by Step</h1>
+      <p>From exploring the Knowledge Graph to combining SPARQL results with LLMs — our complete analytical pipeline.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <h2>The Pipeline at a Glance</h2>
+    <div class="callout blue">
+      <div class="callout-label">Overview</div>
+      Explore KG → Define Research Questions → Write SPARQL Queries → Feed Results to LLMs → Evaluate → Document
+    </div>
+
+    <h2>Step 1 — Explore the mhKG</h2>
+    <p>Before writing targeted queries, we ran exploration queries to understand what the Knowledge Graph actually contains. This is like reading a map before choosing a route.</p>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num" style="background:var(--blue);">a</div>
+        <div class="step-content">
+          <h4>What roles exist?</h4>
+          <p>We listed all distinct semantic roles in the graph (Victim, Assailant, Agent, Theme…) and their frequency — this became our analytical vocabulary.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--blue);">b</div>
+        <div class="step-content">
+          <h4>How many articles per language?</h4>
+          <p>We counted articles per language to understand the corpus balance and normalise comparisons later.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num" style="background:var(--blue);">c</div>
+        <div class="step-content">
+          <h4>Do our keywords appear?</h4>
+          <p>We tested whether "jews", "juden", "ebrei", "refugees" actually appear in the graph before building full queries around them.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 2 — Define Research Questions</h2>
+    <p>We defined four research questions, one per framing dimension required by the course:</p>
+    <table>
+      <thead><tr><th>Dimension</th><th>Our Research Question</th></tr></thead>
+      <tbody>
+        <tr><td>Cross-language</td><td>Is the Victim role assigned more often to Jewish entities in English than in German sources?</td></tr>
+        <tr><td>Cross-document</td><td>Do different newspapers covering Kristallnacht agree on who caused the violence?</td></tr>
+        <tr><td>Diachronic</td><td>Does framing of Jewish refugees change before vs after November 9, 1938?</td></tr>
+        <tr><td>Absence</td><td>Are certain frames completely absent in one language but present in another?</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Step 3 — SPARQL Queries</h2>
+    <p>We wrote four SPARQL queries, collectively using all six mandatory keywords. Each query targets one of our research questions. See the full queries and results on the <a href="sparql.html">SPARQL page →</a></p>
+    <div class="callout green">
+      <div class="callout-label">Keywords used</div>
+      <strong>DISTINCT</strong> · <strong>OPTIONAL</strong> · <strong>UNION</strong> · <strong>FILTER</strong> · <strong>REGEX</strong> · <strong>LIMIT</strong> · <strong>ORDER BY</strong>
+    </div>
+
+    <h2>Step 4 — LLM Experiments</h2>
+    <p>We took the SPARQL results (sets of RDF triples) and fed them to two LLMs using three prompting techniques. We compared the outputs and evaluated each approach.</p>
+    <table>
+      <thead><tr><th>Technique</th><th>What we did</th><th>LLMs used</th></tr></thead>
+      <tbody>
+        <tr><td>Zero-shot</td><td>Asked each LLM to interpret the triples with no examples or guidance</td><td>GPT-4o · Claude Sonnet</td></tr>
+        <tr><td>Few-shot</td><td>Provided 2 example analyses before asking for the real one</td><td>GPT-4o · Claude Sonnet</td></tr>
+        <tr><td>Chain-of-thought</td><td>Asked the LLM to reason step-by-step before answering</td><td>GPT-4o · Claude Sonnet</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Step 5 — Evaluation</h2>
+    <p>For every approach we tested, we scored the output across six dimensions: Accuracy, Analytical Depth, Consistency with KG, Bias Sensitivity, Usability, and Trustworthiness. See the full <a href="evaluation.html">Evaluation page →</a></p>
+
+    <h2>Tools Used</h2>
+    <div class="card-grid">
+      <div class="card" style="border-top-color:var(--purple);">
+        <h4>mhKG SPARQL Endpoint</h4>
+        <p>The multilingual historical Knowledge Graph built by the course team. Queried directly with SPARQL.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--blue);">
+        <h4>GPT-4o</h4>
+        <p>OpenAI's large language model. Used for all three prompting techniques.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--green);">
+        <h4>Claude Sonnet</h4>
+        <p>Anthropic's large language model. Compared directly against GPT-4o outputs.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--amber);">
+        <h4>FrameNet · Framester</h4>
+        <p>Used to identify frame names and Frame Element URIs for our queries.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>KE4H Project 2</strong> · Framing the Displaced · Università di Bologna · 2026
+  </footer>
+</div>
+</body>
+</html>

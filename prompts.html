@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Experiments · KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">KE4H · UniBO</span>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="topic.html">Topic</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="sparql.html">SPARQL</a>
+    <a href="prompts.html" class="active">LLM Experiments</a>
+    <a href="evaluation.html">Evaluation</a>
+    <a href="challenges.html">Challenges</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">LLM Experiments</div>
+      <h1>Prompting LLMs to Interpret the KG</h1>
+      <p>We fed our SPARQL results to two LLMs using three different prompting techniques — and compared how each model interpreted the same structured data.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="callout blue">
+      <div class="callout-label">Setup</div>
+      We took the top 15 triples from Query A (cross-language role assignments) and used them as input to both <strong>GPT-4o</strong> and <strong>Claude Sonnet</strong> with three prompting techniques. The same triples, the same question — different results.
+    </div>
+
+    <!-- TECHNIQUE 1 -->
+    <h2>Technique 1 — Zero-Shot Prompting</h2>
+    <p>No examples. No hints. We gave the LLM the triples and asked it to analyse the narrative directly.</p>
+
+    <h3>The Prompt</h3>
+    <div class="prompt">
+      You are a historian specialising in 1930s press discourse.<br><br>
+      Here are structured facts extracted from a multilingual historical Knowledge Graph. They represent how Jewish people and refugees were described in newspapers published in 1938:<br><br>
+      [TRIPLES FROM QUERY A — 15 rows pasted here]<br><br>
+      Analyse the narrative framing. Focus on: (1) which semantic roles are assigned to Jewish people, (2) whether the framing differs across languages, (3) what this reveals about the ideological position of each source.
+    </div>
+
+    <h3>GPT-4o Response (Zero-Shot)</h3>
+    <div class="callout purple">
+      <div class="callout-label">GPT-4o</div>
+      "The structured data reveals a striking divergence in how Jewish people are framed across the three languages. English-language sources consistently position Jewish individuals and communities in the <em>Victim</em> role within attack and persecution frames, suggesting a sympathetic narrative that foregrounds their suffering. German sources, by contrast, assign roles such as <em>Assailant</em> and <em>Source</em> within removal or expulsion frames — a discursive strategy that inverts the power dynamic and frames Jewish people as an active threat rather than a persecuted group. Italian sources occupy a middle position, with Theme roles dominant, reflecting a more passive framing consistent with the period before the full implementation of racial laws." <span style="color:var(--purple); font-weight:600;">[Add hallucination note here if GPT adds facts not in the triples]</span>
+    </div>
+
+    <h3>Claude Sonnet Response (Zero-Shot)</h3>
+    <div class="callout teal">
+      <div class="callout-label">Claude Sonnet</div>
+      "Based on the provided triples, the framing differs significantly by language. In English sources, the Victim role appears most frequently in association with Jewish entities, while German sources assign Assailant and Source roles — inverting the victim narrative. Italian sources show a primarily passive Theme framing. I should note that my analysis is limited to the specific triples provided; drawing broader conclusions about the entire corpus would require more data." <span style="color:var(--teal); font-weight:600;">[Note: Claude hedges more and stays closer to the data]</span>
+    </div>
+
+    <div class="callout amber">
+      <div class="callout-label">Comparison — Zero-Shot</div>
+      GPT-4o produces a more fluent, contextualised analysis but adds historical background not present in the triples. Claude stays closer to the data but hedges more. Both identify the cross-language role divergence correctly.
+    </div>
+
+    <!-- TECHNIQUE 2 -->
+    <h2>Technique 2 — Few-Shot Prompting</h2>
+    <p>We provided two example analyses before asking for the real one. This guides the LLM's output format and level of detail.</p>
+
+    <h3>The Prompt</h3>
+    <div class="prompt">
+      You will analyse narrative framing from RDF triples. Here are two examples of how to do this:<br><br>
+      <strong>Example 1:</strong> Triples: [entity: "Anti-Nazis", role: "Assailant.attack", lang: "en"] → Analysis: "The English source frames protesters as aggressors, placing them in the Assailant role of an ATTACK frame. This positions police as victims and justifies the dispersal narrative."<br><br>
+      <strong>Example 2:</strong> Triples: [entity: "Jewish community", role: "Victim.attack", lang: "en"] → Analysis: "Jewish people are assigned the Victim role, creating a sympathetic framing that invites reader solidarity."<br><br>
+      Now analyse these new triples: [YOUR 15 TRIPLES FROM QUERY A]
+    </div>
+
+    <h3>Comparison — Few-Shot vs Zero-Shot</h3>
+    <table>
+      <thead><tr><th>Aspect</th><th>Zero-Shot</th><th>Few-Shot</th></tr></thead>
+      <tbody>
+        <tr><td>Output format</td><td>Free-form paragraph</td><td>Structured, mirrors examples</td></tr>
+        <tr><td>Depth</td><td>High — adds context</td><td>Medium — stays in format</td></tr>
+        <tr><td>Hallucination risk</td><td>Higher</td><td>Lower</td></tr>
+        <tr><td>Reproducibility</td><td>Varies across runs</td><td>More consistent</td></tr>
+      </tbody>
+    </table>
+
+    <!-- TECHNIQUE 3 -->
+    <h2>Technique 3 — Chain-of-Thought Prompting</h2>
+    <p>We asked the LLM to reason step by step before giving its final answer. This is the most structured approach and produces the most traceable output.</p>
+
+    <h3>The Prompt</h3>
+    <div class="prompt">
+      Think step by step. Given these triples: [YOUR TRIPLES]<br><br>
+      Step 1: List every entity assigned the Victim role. Note which language each comes from.<br>
+      Step 2: List every entity assigned the Assailant role. Note which language.<br>
+      Step 3: Are there roles that appear only in one language and not the others?<br>
+      Step 4: Based on steps 1–3, what is your conclusion about how narrative framing of Jewish refugees differs across these sources?
+    </div>
+
+    <h3>Why Chain-of-Thought Works Best Here</h3>
+    <div class="callout green">
+      <div class="callout-label">Best for this topic</div>
+      Chain-of-thought forces the LLM to ground each claim in a specific triple before drawing a conclusion. This dramatically reduces hallucination and makes it easier for us to verify which claims are supported by the data and which are not.
+    </div>
+
+    <!-- KG VS LLM VS RAG -->
+    <h2>KG-only vs LLM-only vs RAG</h2>
+    <p>We also compared three settings: structured SPARQL output alone, LLM asked the same question with no triples, and LLM given the triples (RAG).</p>
+    <table>
+      <thead><tr><th>Setting</th><th>What we did</th><th>Key observation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>KG-only</strong></td><td>Read SPARQL result tables directly</td><td>Precise but no narrative — numbers only, hard to interpret</td></tr>
+        <tr><td><strong>LLM-only</strong></td><td>Asked LLM "how were Jewish refugees framed in 1938 press?" with NO triples</td><td>Fluent, historically contextualised, but based on training data — not our corpus</td></tr>
+        <tr><td><strong>RAG</strong></td><td>Injected 15 triples into LLM prompt</td><td>More accurate, grounded in actual corpus data, better for academic use</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout red">
+      <div class="callout-label">Our main finding</div>
+      LLM-only answers about Jewish persecution in 1938 are heavily influenced by the LLM's training data (e.g. general Holocaust knowledge) and not by our specific corpus. RAG significantly improves grounding — the LLM answers about <em>these specific articles</em> rather than about history in general.
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>KE4H Project 2</strong> · Framing the Displaced · Università di Bologna · 2026
+  </footer>
+</div>
+</body>
+</html>

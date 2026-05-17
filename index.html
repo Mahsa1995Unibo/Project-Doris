@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Framing the Displaced · KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">KE4H · UniBO</span>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="topic.html">Topic</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="sparql.html">SPARQL</a>
+    <a href="prompts.html">LLM Experiments</a>
+    <a href="evaluation.html">Evaluation</a>
+    <a href="challenges.html">Challenges</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">KE4H · Project 2 · University of Bologna</div>
+      <h1>Framing the Displaced:<br>How 1938 Newspapers Described Jewish Refugees</h1>
+      <p>A cross-language discourse analysis using Knowledge Graphs, FrameNet, and Large Language Models — comparing English, Italian, and German historical press.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <h2>Abstract</h2>
+    <p>
+      This project investigates how Jewish refugees were narratively framed in three different languages of the multilingual historical Knowledge Graph (mhKG) during the critical year of 1938 — the year of the Évian Conference, Italy's racial laws, and Kristallnacht. Using SPARQL queries against the mhKG, we extracted the semantic roles (Victim, Assailant, Agent) assigned to Jewish entities in English, German, and Italian newspaper articles. We then combined these structured findings with Large Language Models to produce qualitative interpretations, comparing zero-shot, few-shot, and chain-of-thought prompting approaches.
+    </p>
+    <p>
+      Our core finding is that the same displaced population is consistently assigned the <strong>Victim</strong> role in English-language sources, while German Nazi-era press assigns roles that frame Jewish people as a source of threat. Italian press sits between these poles, reflecting the country's gradual shift toward antisemitic policy during 1938.
+    </p>
+
+    <div class="callout red">
+      <div class="callout-label">Research Question</div>
+      Are Jewish people and refugees assigned the Victim or Assailant role differently depending on the language and source of the newspaper — and does this framing shift after Kristallnacht on November 9, 1938?
+    </div>
+
+    <h2>The Three Languages</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num" style="color:#D6E8FA;">EN</div>
+        <h4>English Corpus</h4>
+        <p>American newspapers. Covered the Évian Conference and Kristallnacht. Debated refugee immigration quotas.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--amber);">
+        <div class="card-num" style="color:var(--amber-light);">DE</div>
+        <h4>German Corpus</h4>
+        <p>Hakenkreuzbanner — Nazi party newspaper from Mannheim (1932–1943). Frames Jewish people as a political and cultural threat.</p>
+      </div>
+      <div class="card" style="border-top-color:var(--green);">
+        <div class="card-num" style="color:var(--green-light);">IT</div>
+        <h4>Italian Corpus</h4>
+        <p>Italian press during the year Italy passed its own racial laws, aligning with Germany but with distinct rhetoric.</p>
+      </div>
+    </div>
+
+    <h2>Project Dimensions</h2>
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Cross-Language Framing</h4>
+          <p>Do the three languages assign different semantic roles to the same entities?</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Cross-Document Framing</h4>
+          <p>Do different newspapers covering Kristallnacht agree on who caused the violence?</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Diachronic Analysis</h4>
+          <p>Does the framing change before vs after November 9, 1938?</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>LLM vs KG vs RAG</h4>
+          <p>Which approach best captures the narrative patterns — structured queries, LLMs alone, or both combined?</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Team</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-initial">A</div>
+        <div class="team-name">Your Name</div>
+        <div class="team-role">SPARQL Analysis</div>
+      </div>
+      <div class="team-card">
+        <div class="team-initial">B</div>
+        <div class="team-name">Team Member 2</div>
+        <div class="team-role">LLM Experiments</div>
+      </div>
+      <div class="team-card">
+        <div class="team-initial">C</div>
+        <div class="team-name">Team Member 3</div>
+        <div class="team-role">Evaluation & Website</div>
+      </div>
+      <div class="team-card">
+        <div class="team-initial">D</div>
+        <div class="team-name">Team Member 4</div>
+        <div class="team-role">Methodology & Report</div>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <div class="callout-label">Resources</div>
+      <a href="https://framenet.icsi.berkeley.edu/" target="_blank">FrameNet Database</a> ·
+      <a href="https://www.wikidata.org" target="_blank">Wikidata</a> ·
+      <a href="https://docs.github.com/en/pages" target="_blank">GitHub Pages</a> ·
+      <a href="methodology.html">Our Methodology →</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>KE4H Project 2</strong> · Framing the Displaced · Università di Bologna · 2026<br>
+    Course instructors: Fiumanò · Lazzari · Ponzetto · Presutti
+  </footer>
+
+</div>
+</body>
+</html>

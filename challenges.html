@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenges · KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">KE4H · UniBO</span>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="topic.html">Topic</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="sparql.html">SPARQL</a>
+    <a href="prompts.html">LLM Experiments</a>
+    <a href="evaluation.html">Evaluation</a>
+    <a href="challenges.html" class="active">Challenges</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Challenges</div>
+      <h1>What Went Wrong<br>— and How We Fixed It</h1>
+      <p>Honest documentation of the technical and methodological obstacles we encountered during the project.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <h2>Technical Challenges</h2>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num" style="background:var(--red);">1</div>
+        <div class="step-content">
+          <h4>Multilingual keyword matching</h4>
+          <p>"Jews" in English, "Juden" in German, "ebrei" in Italian — these are three different strings for the same concept. We had to include all variants in every FILTER + REGEX, or we would miss most results in two of the three corpora. We discovered this during the exploration phase when German results were unexpectedly empty.</p>
+          <p><strong>Solution:</strong> Used <code>REGEX(LCASE(?text), "jews|juden|ebrei|jewish|flüchtlinge|refugees", "i")</code> — combining all language variants and making it case-insensitive.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num" style="background:var(--red);">2</div>
+        <div class="step-content">
+          <h4>Corpus size imbalance</h4>
+          <p>The English corpus is much larger than the Italian corpus. This means raw counts are not comparable — 50 Victim assignments in English vs 11 in Italian does not mean English press is more sympathetic. It may just mean there are more English articles.</p>
+          <p><strong>Solution:</strong> We normalised counts by the total number of articles per language, using Query B's results divided by total article counts from our exploration query.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num" style="background:var(--red);">3</div>
+        <div class="step-content">
+          <h4>Frame URI naming</h4>
+          <p>Framester URIs are not always intuitive. We assumed the ATTACK frame's Victim role would be <code>framester:fe/Victim</code> but the actual URI is longer and frame-specific. Wrong URIs return zero results with no error message — which looks like there are simply no occurrences.</p>
+          <p><strong>Solution:</strong> Ran Query A first (without filtering by role URI) to see the actual role strings used in the graph, then copied them exactly into Query C.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Methodological Challenges</h2>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-num" style="background:var(--amber);">4</div>
+        <div class="step-content">
+          <h4>LLM hallucination on sensitive topics</h4>
+          <p>Both GPT-4o and Claude, when asked about Jewish persecution in 1938, draw on their training knowledge (general Holocaust history) rather than strictly on the triples we provided. This means the LLM output reflects both the corpus AND the LLM's prior knowledge — making it hard to separate the two.</p>
+          <p><strong>Solution:</strong> Chain-of-thought prompting with explicit instructions to only draw conclusions from the provided triples. We also ran LLM-only (no triples) as a baseline to see what the model "knows" without our data.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num" style="background:var(--amber);">5</div>
+        <div class="step-content">
+          <h4>Interpreting ambiguous roles</h4>
+          <p>Some frame roles are ambiguous: "Source" in a removing frame could mean the origin of displaced people or the entity doing the removing. Context is needed — but context is in the full article text, not just the triple.</p>
+          <p><strong>Solution:</strong> We retrieved the :hasRealization text (the actual phrase from the article) alongside the role, which gave enough context to interpret borderline cases correctly.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num" style="background:var(--amber);">6</div>
+        <div class="step-content">
+          <h4>Ethical considerations</h4>
+          <p>Prompting LLMs with antisemitic framing from Nazi newspapers required careful wording to avoid the models refusing to engage or producing outputs that felt exploitative of historical trauma.</p>
+          <p><strong>Solution:</strong> Framed all prompts explicitly as academic historical analysis, with clear context about the scholarly purpose. This ensured productive LLM responses while maintaining ethical responsibility.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-label">Lesson learned</div>
+      The most valuable lesson: <strong>always run exploration queries first</strong>. Every technical problem we encountered could have been avoided by spending 10 minutes checking what the graph actually contains before writing complex queries. The exploration phase is not optional — it is the most important step.
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>KE4H Project 2</strong> · Framing the Displaced · Università di Bologna · 2026
+  </footer>
+</div>
+</body>
+</html>

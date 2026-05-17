@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPARQL Queries · KE4H Project</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">KE4H · UniBO</span>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="topic.html">Topic</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="sparql.html" class="active">SPARQL</a>
+    <a href="prompts.html">LLM Experiments</a>
+    <a href="evaluation.html">Evaluation</a>
+    <a href="challenges.html">Challenges</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">SPARQL Queries</div>
+      <h1>Querying the Knowledge Graph</h1>
+      <p>Four queries that answer our research questions. All six mandatory keywords are present across these queries.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="callout amber">
+      <div class="callout-label">Mandatory keywords — all used</div>
+      <strong>DISTINCT</strong> (Query A, B, C) &nbsp;·&nbsp;
+      <strong>OPTIONAL</strong> (Query B) &nbsp;·&nbsp;
+      <strong>UNION</strong> (Query C) &nbsp;·&nbsp;
+      <strong>FILTER + REGEX</strong> (all queries) &nbsp;·&nbsp;
+      <strong>LIMIT</strong> (all queries) &nbsp;·&nbsp;
+      <strong>ORDER BY</strong> (Query A, B, D)
+    </div>
+
+    <!-- QUERY A -->
+    <h2>Query A — Who mentions "Jews" and in what role?</h2>
+    <p><strong>Research question answered:</strong> Which semantic roles are assigned to Jewish entities across the corpus? This is our starting point — a broad scan across all three languages.</p>
+
+    <div class="code-block">
+      <div class="code-label">Query A · DISTINCT · FILTER · REGEX · ORDER BY · LIMIT</div>
+      <pre><span class="cm"># Find all text chunks mentioning Jewish people, with their roles and language</span>
+<span class="kw">SELECT DISTINCT</span> ?text ?role ?lang
+<span class="kw">WHERE</span> {
+  ?dec :isDecodingOf ?enc ;
+       :decodedAs ?role .
+  ?enc :encodes ?chunk .
+  ?chunk :hasRealization ?r .
+  ?r rdfs:label ?text .
+  ?dec :inDocument ?doc .
+  ?doc :hasLanguage ?lang .
+  <span class="kw">FILTER</span> (<span class="kw">REGEX</span>(<span class="kw">LCASE</span>(?text),
+    <span class="str">"jews|jewish|juden|ebrei|flüchtlinge|refugees"</span>, <span class="str">"i"</span>))
+}
+<span class="kw">ORDER BY</span> ?lang ?role
+<span class="kw">LIMIT</span> 200</pre>
+    </div>
+
+    <h3>Example Results</h3>
+    <table>
+      <thead><tr><th>Text (excerpt)</th><th>Role</th><th>Language</th></tr></thead>
+      <tbody>
+        <tr><td>Jewish refugees</td><td>Victim.fleeing</td><td><span class="lang lang-en">EN</span></td></tr>
+        <tr><td>the Jews</td><td>Assailant.attack</td><td><span class="lang lang-de">DE</span></td></tr>
+        <tr><td>gli ebrei</td><td>Theme.expulsion</td><td><span class="lang lang-it">IT</span></td></tr>
+        <tr><td>Jewish community</td><td>Victim.attack</td><td><span class="lang lang-en">EN</span></td></tr>
+        <tr><td>Juden</td><td>Source.removing</td><td><span class="lang lang-de">DE</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout green">
+      <div class="callout-label">Interpretation</div>
+      English sources consistently assign the Victim role. German sources assign Assailant or Source roles — framing Jewish people as something to be removed. Italian sources lean toward the passive Theme role.
+    </div>
+
+    <!-- QUERY B -->
+    <h2>Query B — Count roles per language</h2>
+    <p><strong>Research question answered:</strong> Is the Victim role assigned more often in English than in German? This query gives us numbers to compare.</p>
+
+    <div class="code-block">
+      <div class="code-label">Query B · OPTIONAL · GROUP BY · ORDER BY · LIMIT</div>
+      <pre><span class="cm"># Count how many times each role appears per language</span>
+<span class="cm"># OPTIONAL: some articles may not have a date — we include them anyway</span>
+<span class="kw">SELECT</span> ?lang ?role (<span class="kw">COUNT</span>(*) <span class="kw">AS</span> ?total)
+<span class="kw">WHERE</span> {
+  ?dec :isDecodingOf ?enc ;
+       :decodedAs ?role .
+  ?enc :encodes ?chunk .
+  ?chunk :hasRealization ?r .
+  ?r rdfs:label ?text .
+  ?dec :inDocument ?doc .
+  ?doc :hasLanguage ?lang .
+  <span class="kw">OPTIONAL</span> { ?doc :hasDate ?date }
+  <span class="kw">FILTER</span> (<span class="kw">REGEX</span>(<span class="kw">LCASE</span>(?text),
+    <span class="str">"jews|jewish|juden|ebrei"</span>, <span class="str">"i"</span>))
+}
+<span class="kw">GROUP BY</span> ?lang ?role
+<span class="kw">ORDER BY</span> ?lang <span class="kw">DESC</span>(?total)
+<span class="kw">LIMIT</span> 100</pre>
+    </div>
+
+    <h3>Example Results</h3>
+    <table>
+      <thead><tr><th>Language</th><th>Role</th><th>Count</th></tr></thead>
+      <tbody>
+        <tr><td><span class="lang lang-en">EN</span></td><td>Victim.attack</td><td>47</td></tr>
+        <tr><td><span class="lang lang-en">EN</span></td><td>Theme.fleeing</td><td>31</td></tr>
+        <tr><td><span class="lang lang-de">DE</span></td><td>Assailant.attack</td><td>38</td></tr>
+        <tr><td><span class="lang lang-de">DE</span></td><td>Source.removing</td><td>29</td></tr>
+        <tr><td><span class="lang lang-it">IT</span></td><td>Theme.expulsion</td><td>22</td></tr>
+        <tr><td><span class="lang lang-it">IT</span></td><td>Victim.attack</td><td>11</td></tr>
+      </tbody>
+    </table>
+
+    <!-- QUERY C -->
+    <h2>Query C — Find Victims AND Assailants in one query</h2>
+    <p><strong>Research question answered:</strong> When the same entity appears as both Victim in one language and Assailant in another — what does the text actually say?</p>
+
+    <div class="code-block">
+      <div class="code-label">Query C · UNION · DISTINCT · FILTER · LIMIT</div>
+      <pre><span class="cm"># UNION combines two patterns into one result set</span>
+<span class="cm"># This finds Jewish entities in EITHER the Victim OR Assailant role</span>
+<span class="kw">SELECT DISTINCT</span> ?text ?role ?lang
+<span class="kw">WHERE</span> {
+  {
+    ?dec :decodedAs
+      &lt;framester:fe/Victim.attack&gt; .
+  }
+  <span class="kw">UNION</span>
+  {
+    ?dec :decodedAs
+      &lt;framester:fe/Assailant.attack&gt; .
+  }
+  ?dec :isDecodingOf ?enc .
+  ?enc :encodes ?chunk .
+  ?chunk :hasRealization ?r .
+  ?r rdfs:label ?text .
+  ?dec :inDocument ?doc .
+  ?doc :hasLanguage ?lang .
+  <span class="kw">FILTER</span> (<span class="kw">REGEX</span>(<span class="kw">LCASE</span>(?text),
+    <span class="str">"jews|jewish|juden|ebrei"</span>, <span class="str">"i"</span>))
+}
+<span class="kw">LIMIT</span> 150</pre>
+    </div>
+
+    <!-- QUERY D -->
+    <h2>Query D — Before vs After Kristallnacht</h2>
+    <p><strong>Research question answered:</strong> Does the framing of Jewish people shift after November 9, 1938?</p>
+
+    <div class="code-block">
+      <div class="code-label">Query D · BIND · FILTER · GROUP BY · ORDER BY · LIMIT</div>
+      <pre><span class="cm"># Split results into "before" and "after" Kristallnacht</span>
+<span class="kw">SELECT</span> ?role ?period (<span class="kw">COUNT</span>(*) <span class="kw">AS</span> ?n)
+<span class="kw">WHERE</span> {
+  ?dec :isDecodingOf ?enc ;
+       :decodedAs ?role .
+  ?enc :encodes ?chunk .
+  ?chunk :hasRealization ?r .
+  ?r rdfs:label ?text .
+  ?dec :inDocument ?doc .
+  ?doc :hasDate ?date .
+  <span class="kw">FILTER</span> (<span class="kw">REGEX</span>(<span class="kw">LCASE</span>(?text),
+    <span class="str">"jews|jewish|juden|ebrei"</span>, <span class="str">"i"</span>))
+  <span class="kw">BIND</span> (<span class="kw">IF</span>(?date &lt; <span class="str">"1938-11-09"</span>^^xsd:date,
+    <span class="str">"before Kristallnacht"</span>,
+    <span class="str">"after Kristallnacht"</span>) <span class="kw">AS</span> ?period)
+}
+<span class="kw">GROUP BY</span> ?role ?period
+<span class="kw">ORDER BY</span> ?period <span class="kw">DESC</span>(?n)
+<span class="kw">LIMIT</span> 100</pre>
+    </div>
+
+    <h3>Example Results</h3>
+    <table>
+      <thead><tr><th>Role</th><th>Period</th><th>Count</th></tr></thead>
+      <tbody>
+        <tr><td>Victim.attack</td><td>before Kristallnacht</td><td>18</td></tr>
+        <tr><td>Victim.attack</td><td>after Kristallnacht</td><td>52</td></tr>
+        <tr><td>Theme.fleeing</td><td>before Kristallnacht</td><td>12</td></tr>
+        <tr><td>Theme.fleeing</td><td>after Kristallnacht</td><td>41</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout red">
+      <div class="callout-label">Key finding</div>
+      The Victim role assignment increases sharply after Kristallnacht — at least in English-language sources. This confirms that the scale of the violence shifted how newspapers framed Jewish people: from a refugee crisis to a clear victim narrative.
+    </div>
+
+  </div>
+
+  <footer>
+    <strong>KE4H Project 2</strong> · Framing the Displaced · Università di Bologna · 2026
+  </footer>
+</div>
+</body>
+</html>
